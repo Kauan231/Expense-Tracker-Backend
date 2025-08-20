@@ -1,0 +1,25 @@
+{
+  "development": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "./prod.sqlite3",
+    "dialect": "sqlite",
+    "logging": false
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": ":memory:",
+    "dialect": "sqlite",
+    "logging": false
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "./prod.sqlite3",
+    "dialect": "sqlite"
+  }
+}
