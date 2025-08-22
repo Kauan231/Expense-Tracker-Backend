@@ -11,14 +11,12 @@ const invoiceTrackerPaths =
     '/invoiceTrackers/create': {
         ...creationBody(createInvoiceTrackerSwaggerSchema, readInvoiceTrackerSwaggerSchema, 'invoiceTracker', ['InvoiceTracker'])
     },
-    '/invoiceTrackers/{id}': {
-        ...ReadByIdBody(readInvoiceTrackerSwaggerSchema, 'invoiceTracker', ['InvoiceTracker'])
-    },
     '/invoiceTrackers': {
         ...ReadWithSkipBody(readInvoiceTrackerSwaggerSchema, 'invoiceTrackers', ['InvoiceTracker'])
     },
     '/invoiceTrackers/{id}': {
-        ...DeleteByIdBody('invoiceTracker', ['InvoiceTracker'])
+        ...DeleteByIdBody('invoiceTracker', ['InvoiceTracker']),
+        ...ReadByIdBody(readInvoiceTrackerSwaggerSchema, 'invoiceTracker', ['InvoiceTracker'])
     }
 };
 

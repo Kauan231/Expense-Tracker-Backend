@@ -1,4 +1,6 @@
 const invoiceTrackerPaths = require('./invoiceTrackerSchemas');
+const invoicePaths = require('./invoiceSchemas');
+const documentPaths = require('./documentSchemas');
 
 const swaggerFile = {
     openapi: '3.0.0',
@@ -7,7 +9,9 @@ const swaggerFile = {
         version: '1.0.0',
     },
     paths: {
-        ...invoiceTrackerPaths
+        ...invoiceTrackerPaths,
+        ...invoicePaths,
+        ...documentPaths
     },
 };
 

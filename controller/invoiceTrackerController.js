@@ -11,7 +11,9 @@ class InvoiceTrackerController extends Controller {
     }
 
     async ReadById(id = 0) {
-        return await this.repository.ReadByIdAndPopulate(id);
+        return await this.repository.ReadByIdAndNestedPopulate(id, [
+            { model: 'Invoice', include: ['Document'] }
+        ]);
     }
 }
 

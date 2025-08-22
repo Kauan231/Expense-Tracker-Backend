@@ -15,6 +15,10 @@ module.exports = (sequelize, DataTypes) => {
       Invoice.belongsTo(models.InvoiceTracker, {
         foreignKey: 'invoiceTrackerId'
       })
+
+      Invoice.hasMany(models.Document, {
+        foreignKey: 'invoiceId'
+      })
     }
   }
   Invoice.init({

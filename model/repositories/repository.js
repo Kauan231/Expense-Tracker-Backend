@@ -53,6 +53,35 @@ class Repository {
         }
     }
 
+    async ReadByIdAndNestedPopulate(id, populate) {
+        try {
+            const buildInclude = (items) => {
+                if (Array.isArray(items)) {
+                    return items.map(i => buildInclude(i));
+                }
+                if (typeof items === 'object') {
+                    return {
+                        model: Models[items.model],
+                        include: items.include ? buildInclude(items.include) : []
+                    };
+                }
+                return { model: Models[items] };
+            };
+
+            const include = buildInclude(populate);
+
+            const foundItem = await Models[this.model].findOne({
+                where: { id },
+                include
+            });
+
+            return foundItem?.dataValues;
+        } catch (err) {
+            console.log('Database error', err);
+            throw new DatabaseError('error executing findOne');
+        }
+    }
+
     async ReadManyByCustomField(field, value) {
         let foundItems;
         try {

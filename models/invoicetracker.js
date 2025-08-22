@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      InvoiceTracker.hasMany(models.Invoice, {
+        foreignKey: 'invoiceTrackerId'
+      })
     }
   }
   InvoiceTracker.init({
