@@ -17,6 +17,13 @@ module.exports = (sequelize, DataTypes) => {
       })
     }
   }
+
+  /*
+    Types:
+    0: receipt
+    1: billet
+  */
+
   Document.init({
     documentPath: DataTypes.STRING,
     type: DataTypes.INTEGER,

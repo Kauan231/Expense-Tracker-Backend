@@ -14,9 +14,18 @@ class DocumentController extends Controller {
         return await this.repository.Create(data);
     }
 
+    async BulkCreate(data = [{
+        documentPath,
+        type,
+        invoiceId
+    }]) {
+        return await this.repository.BulkCreate(data);
+    }
+
     async ReadById(id = 0) {
         return await this.repository.ReadById(id);
     }
+
 }
 
 module.exports = DocumentController;

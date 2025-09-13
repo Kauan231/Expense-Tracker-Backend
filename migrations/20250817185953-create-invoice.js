@@ -9,14 +9,8 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      dueDate: {
-        type: Sequelize.INTEGER
-      },
-      month: {
-        type: Sequelize.INTEGER
-      },
-      year: {
-        type: Sequelize.INTEGER
+      date: {
+        type: Sequelize.DATE
       },
       cost: {
         type: Sequelize.DOUBLE

@@ -2,16 +2,16 @@ const BaseModel = require('./baseModel');
 
 class Invoice extends BaseModel {
     id;
-    dueDate;
-    month;
-    year;
+    date;
     cost;
     status;
     invoiceTrackerId;
     constructor(data={
         id:'',
         name:'',
-        dueDate:0
+        date:new Date(),
+        cost: 0,
+        status: 0
     }) {
         if(data.dataValues != undefined) {
             data = data.dataValues;
@@ -19,7 +19,10 @@ class Invoice extends BaseModel {
         super();
         this.id = data.id;
         this.name = data.name;
-        this.dueDate = data.dueDate;
+        this.date = data.date;
+        this.cost = data.cost;
+        this.status = data.status;
+        this.invoiceTrackerId = data.invoiceTrackerId;
     }
 }
 

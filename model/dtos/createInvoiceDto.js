@@ -3,27 +3,21 @@ const Dto = require('./dto');
 const { ValidationError } = require('../../utils/errors');
 
 const createInvoiceSchema = Joi.object({
-    dueDate: Joi.number().required(),
-    month: Joi.number().required(),
-    year: Joi.number().required(),
+    date: Joi.date().required(),
     cost: Joi.number().required(),
     status: Joi.number().required(),
     invoiceTrackerId: Joi.number().required()
 });
 
 class CreateInvoiceDto extends Dto {
-    dueDate;
-    month;
-    year;
+    date;
     cost;
     status;
     invoiceTrackerId;
 
-    constructor(dueDate, month, year, cost, status, invoiceTrackerId) {
+    constructor(date, cost, status, invoiceTrackerId) {
         super();
-        this.dueDate = dueDate;
-        this.month = month;
-        this.year = year;
+        this.date = date;
         this.cost = cost;
         this.status = status;
         this.invoiceTrackerId = invoiceTrackerId;
@@ -34,18 +28,14 @@ class CreateInvoiceDto extends Dto {
 }
 
 class EmptyInvoiceDto extends Dto {
-    dueDate;
-    month;
-    year;
+    date;
     cost;
     status;
     invoiceTrackerId;
 
-    constructor(dueDate, month, year, cost, status, invoiceTrackerId) {
+    constructor(date, cost, status, invoiceTrackerId) {
         super();
-        this.dueDate = dueDate;
-        this.month = month;
-        this.year = year;
+        this.date = date;
         this.cost = cost;
         this.status = status;
         this.invoiceTrackerId = invoiceTrackerId;

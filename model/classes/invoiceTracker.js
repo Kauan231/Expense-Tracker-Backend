@@ -9,8 +9,6 @@ class InvoiceTracker extends BaseModel {
         name:'',
         dueDate:0
     }) {
-        console.log("data legal", data)
-
         if(data.dataValues != undefined) {
             data = data.dataValues;
         }

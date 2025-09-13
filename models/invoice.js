@@ -22,9 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Invoice.init({
-    dueDate: DataTypes.INTEGER,
-    month: DataTypes.INTEGER,
-    year: DataTypes.INTEGER,
+    date: DataTypes.DATE,
     cost: DataTypes.DOUBLE,
     status: DataTypes.INTEGER,
     invoiceTrackerId: DataTypes.INTEGER

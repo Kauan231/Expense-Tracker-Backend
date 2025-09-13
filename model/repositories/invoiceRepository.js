@@ -7,9 +7,7 @@ class InvoiceRepository extends Repository {
     }
 
     async Create(data = {
-        dueDate,
-        month,
-        year,
+        date,
         cost,
         status,
         invoiceTrackerId
@@ -19,9 +17,7 @@ class InvoiceRepository extends Repository {
     }
 
     async BulkCreate(data = [{
-        dueDate,
-        month,
-        year,
+        date,
         cost,
         status,
         invoiceTrackerId
