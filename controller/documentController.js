@@ -1,5 +1,6 @@
 const Controller = require('./controller');
 const { DocumentRepository } = require('../model/repositories');
+const InvoiceController = require('./invoiceController');
 
 class DocumentController extends Controller {
     constructor() {
@@ -9,9 +10,20 @@ class DocumentController extends Controller {
     async Create(data = {
         documentPath,
         type,
-        invoiceId
+        invoiceId,
+        cost
     }) {
-        return await this.repository.Create(data);
+
+
+        let { documentPath, type, invoiceId, cost } = data;
+        let result = await this.repository.Create({documentPath, type, invoiceId});
+
+        if(type == 0 || ![undefined, null, ""].includes(cost)) {
+            const invoiceController = new InvoiceController();
+            await invoiceController.UpdateInvoice(invoiceId, cost, 1);
+        }
+
+        return result;
     }
 
     async BulkCreate(data = [{
@@ -25,7 +37,6 @@ class DocumentController extends Controller {
     async ReadById(id = 0) {
         return await this.repository.ReadById(id);
     }
-
 }
 
 module.exports = DocumentController;

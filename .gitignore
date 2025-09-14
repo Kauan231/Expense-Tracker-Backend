@@ -4,6 +4,7 @@
 *.db
 *.db3
 
+uploads/
 
 # Logs
 logs

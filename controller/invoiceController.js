@@ -19,6 +19,10 @@ class InvoiceController extends Controller {
         return await this.repository.ReadById(id);
     }
 
+    async UpdateInvoice(id, cost, status) {
+        return await this.repository.UpdateInvoice(id, {cost, status});
+    }
+
     async CreateAYear(data = {
         year,
         invoiceTrackerId

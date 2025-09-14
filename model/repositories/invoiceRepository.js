@@ -38,6 +38,14 @@ class InvoiceRepository extends Repository {
         if (results?.length == 0 || results?.length == undefined) { return []; }
         return results.map(result => new Invoice(result));
     }
+
+    async UpdateInvoice(id, fields) {
+        let invoice = await super.ReadByIdRaw(id);
+        for(let field of Object.keys(fields)) {
+            invoice[field] = fields[field];
+        }
+        return await invoice.save();
+    }
 }
 
 module.exports = InvoiceRepository;

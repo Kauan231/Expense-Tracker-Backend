@@ -1,15 +1,84 @@
 const j2s = require('joi-to-swagger');
-const { createDocumentSchema } = require('../model/dtos/createDocumentDto');
 const readDocumentSchema = require('../model/dtos/readDocumentDto');
-const { creationBody, ReadWithSkipBody, ReadByIdBody, DeleteByIdBody } = require('./common');
+const { ReadWithSkipBody, ReadByIdBody, DeleteByIdBody } = require('./common');
 
-const { swagger: createDocumentSwaggerSchema } = j2s(createDocumentSchema);
 const { swagger: readDocumentSwaggerSchema } = j2s(readDocumentSchema);
 
 const documentPaths =
 {
     '/documents/create': {
-        ...creationBody(createDocumentSwaggerSchema, readDocumentSwaggerSchema, 'document', ['Document'])
+        post: {
+            summary: `Uploads a document`,
+            tags: ['Document'],
+            requestBody: {
+                required: true,
+                content: {
+                    'multipart/form-data': {
+                    schema: {
+                        type: 'object',
+                        properties: {
+                            // File
+                            file: {
+                                type: 'string',
+                                format: 'binary',
+                                description: 'The file to upload'
+                            },
+                            // Additional JSON fields
+                            type: { type: 'number', format: 'float' },
+                            invoiceId: { type: 'number', format: 'float' },
+                            cost: { type: 'number', format: 'float' },
+                        },
+                        required: ['file', 'type', 'invoiceId'],
+                        additionalProperties: false
+                    }
+                    }
+                }
+            },
+            responses: {
+            '201': {
+                description: `File uploaded successfully`,
+                content: {
+                'application/json': {
+                    schema: {
+                        type: 'object',
+                        properties: {
+                            type: { type: 'string' },
+                            result: readDocumentSwaggerSchema
+                        },
+                    }
+                }
+                }
+            },
+            '400': {
+                description: 'Validation error',
+                content: {
+                'application/json': {
+                    schema: {
+                    type: 'object',
+                    properties: {
+                        type: { type: 'string' },
+                        message: { type: 'string' }
+                    }
+                    }
+                }
+                }
+            },
+            '500': {
+                description: 'Database error',
+                content: {
+                'application/json': {
+                    schema: {
+                    type: 'object',
+                    properties: {
+                        type: { type: 'string' },
+                        message: { type: 'string' }
+                    }
+                    }
+                }
+                }
+            }
+            }
+        }
     },
     '/documents': {
         ...ReadWithSkipBody(readDocumentSwaggerSchema, 'documents', ['Document'])

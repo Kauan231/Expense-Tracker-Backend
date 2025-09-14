@@ -41,6 +41,18 @@ class Repository {
         }
     }
 
+    async ReadByIdRaw(id) {
+        let foundItem;
+        try {
+            foundItem = await Models[this.model].findOne({ where: { id: id } });
+        } catch (err) {
+            console.log('Database error', err);
+            throw new DatabaseError('error executing findOne');
+        } finally {
+            return foundItem;
+        }
+    }
+
     async ReadByIdAndPopulate(id, populate) {
         let foundItem;
         try {
@@ -213,6 +225,15 @@ class Repository {
     async Delete(id) {
         try {
             await Models[this.model].destroy({ where: { id: id } });
+        } catch (err) {
+            console.log('Database error', err);
+            throw new DatabaseError('error executing destroy');
+        }
+    }
+
+    async DeleteByCustomField(id, customField) {
+        try {
+            await Models[this.model].destroy({ where: { [customField]: id } });
         } catch (err) {
             console.log('Database error', err);
             throw new DatabaseError('error executing destroy');
