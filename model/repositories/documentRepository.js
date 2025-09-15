@@ -11,7 +11,10 @@ class DocumentRepository extends Repository {
         type,
         invoiceId,
     }) {
-        await super.DeleteByCustomField(data.invoiceId, "invoiceId");
+        await super.DeleteByCustomFieldsArray([
+            ['type', data.type],
+            ['invoiceId', data.invoiceId]
+        ]);
 
         const result = await super.Create(data);
         return new Document(result);
