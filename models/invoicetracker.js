@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   InvoiceTracker.init({
-    Name: DataTypes.STRING,
+    name: DataTypes.STRING,
     dueDate: DataTypes.INTEGER
   }, {
     sequelize,

@@ -6,11 +6,11 @@ class InvoiceTrackerController extends Controller {
         super(new InvoiceTrackerRepository());
     }
 
-    async Create(data = { name: '', dueDate: 1, invoiceTrackerId: 0 }) {
+    async Create(data = { name: '', dueDate: 1}) {
         return await this.repository.Create(data);
     }
 
-    async BulkCreate(data = [{ name: '', dueDate: 1, invoiceTrackerId: 0 }]) {
+    async BulkCreate(data = [{ name: '', dueDate: 1}]) {
         return await this.repository.BulkCreate(data);
     }
 

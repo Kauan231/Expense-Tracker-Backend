@@ -46,6 +46,10 @@ class InvoiceRepository extends Repository {
         }
         return await invoice.save();
     }
+
+    async DeleteAllInvoicesOfAPeriod(year) {
+        await super.DeleteByYear(year, "date");
+    }
 }
 
 module.exports = InvoiceRepository;

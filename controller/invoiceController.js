@@ -28,15 +28,22 @@ class InvoiceController extends Controller {
         invoiceTrackerId
     }) {
         const { invoiceTrackerId, year } = data;
+        const invoiceRepository = new InvoiceRepository();
+        await invoiceRepository.DeleteAllInvoicesOfAPeriod(year);
+
         const invoiceTrackerRepository = new InvoiceTrackerRepository();
         const invoiceTracker = await invoiceTrackerRepository.ReadById(invoiceTrackerId);
-        const dueDate = invoiceTracker.dueDate;
+        let dueDate = invoiceTracker.dueDate;
+        if(dueDate == 0) {
+            dueDate = 1;
+        }
         let invoicesToCreate = [];
         for(let month=1; month < 12; month++) {
-            let date = new Date(year, dueDate, month);
+            let date = new Date(year, month, dueDate);
             let newInvoice = {
                 date: date,
-                invoiceTrackerId: invoiceTracker.id
+                invoiceTrackerId: invoiceTracker.id,
+                status: 0
             }
 
             invoicesToCreate.push(newInvoice);

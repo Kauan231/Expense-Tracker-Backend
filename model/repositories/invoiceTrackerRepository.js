@@ -6,7 +6,7 @@ class InvoiceTrackerRepository extends Repository {
         super('InvoiceTracker');
     }
 
-    async Create(data = { name: '' }) {
+    async Create(data = { name: '', dueDate }) {
         const result = await super.Create(data);
         return new InvoiceTracker(result);
     }

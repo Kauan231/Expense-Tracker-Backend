@@ -239,6 +239,18 @@ class Repository {
             throw new DatabaseError('error executing destroy');
         }
     }
+
+    async DeleteByYear(year, field) {
+        const startDate = new Date(year, 0, 1);   // Jan 1, 00:00:00
+        const endDate = new Date(year, 11, 31, 23, 59, 59, 999); // Dec 31, 23:59:59
+        return await Models[this.model].destroy({
+            where: {
+                [field]: {
+                    [Op.between]: [startDate, endDate]
+                }
+            }
+        });
+    }
 }
 
 module.exports = Repository;
