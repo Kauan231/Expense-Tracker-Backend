@@ -20,7 +20,11 @@ class DocumentController extends Controller {
 
         if(type == 0 || ![undefined, null, ""].includes(cost)) {
             const invoiceController = new InvoiceController();
-            await invoiceController.UpdateInvoice(invoiceId, cost, 1);
+            let newStatus;
+            if(type === 0) {
+                newStatus = 1;
+            }
+            await invoiceController.UpdateInvoice(invoiceId, cost, newStatus);
         }
 
         return result;
