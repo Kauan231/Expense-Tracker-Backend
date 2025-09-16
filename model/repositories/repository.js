@@ -94,6 +94,69 @@ class Repository {
         }
     }
 
+    async ReadByIdAndNestedPopulateFromADate(id, populate) {
+        try {
+            const buildInclude = (items) => {
+                if (Array.isArray(items)) {
+                    return items.map(i => buildInclude(i));
+                }
+
+                if (typeof items === 'object') {
+                    const includeObj = {
+                        model: Models[items.model],
+                        include: items.include ? buildInclude(items.include) : []
+                    };
+
+                    if (items.year && items.model === 'Invoice') {
+                        const whereClause = [];
+
+                        // Year filter
+                        if (items.year) {
+                            whereClause.push(
+                                Models.Sequelize.where(
+                                    Models.Sequelize.fn('strftime', '%Y', Models.Sequelize.col('date')),
+                                    items.year.toString()
+                                )
+                            );
+                        }
+
+                        // Month filter (1-12)
+                        if (items.month) {
+                            // Ensure two digits for SQLite: '01', '02', ... '12'
+                            const monthStr = String(items.month).padStart(2, '0');
+                            whereClause.push(
+                                Models.Sequelize.where(
+                                    Models.Sequelize.fn('strftime', '%m', Models.Sequelize.col('date')),
+                                    monthStr
+                                )
+                            );
+                        }
+
+                        includeObj.where = { [Models.Sequelize.Op.and]: whereClause };
+                        includeObj.required = false; // keep parent even if no invoices match
+                    }
+
+
+                    return includeObj;
+                }
+
+                return { model: Models[items] };
+            };
+
+            const include = buildInclude(populate);
+
+            const foundItem = await Models[this.model].findOne({
+                where: { id },
+                include
+            });
+
+            return foundItem?.dataValues;
+        } catch (err) {
+            console.log('Database error', err);
+            throw new DatabaseError('error executing findOne');
+        }
+    }
+
     async ReadManyByCustomField(field, value) {
         let foundItems;
         try {

@@ -34,7 +34,7 @@ class CommonRoutes {
         }
         let results;
         try {
-            results = await this.controller.ReadById(createdDto.id);
+            results = await this.controller.ReadById(createdDto.id, req.query?.year, req.query?.month);
         } catch (e) {
             return SendError(res, e);
         }
