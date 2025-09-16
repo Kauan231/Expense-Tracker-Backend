@@ -13,8 +13,6 @@ class DocumentController extends Controller {
         invoiceId,
         cost
     }) {
-
-
         let { documentPath, type, invoiceId, cost } = data;
         let result = await this.repository.Create({documentPath, type, invoiceId});
 
