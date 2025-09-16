@@ -272,16 +272,44 @@ class Repository {
         }
     }
 
-    async ReadAllWithSkipLimit(skip, limit) {
-        const query = skip == 0 ? { limit: limit } : { offset: skip, limit: limit };
-        let foundItems;
+    async ReadAllWithSkipLimit(skip = 0, limit = 12, year, month) {
         try {
-            foundItems = await Models[this.model].findAll(query);
+            const query = {
+                limit,
+                offset: skip
+            };
+
+            // Build where clause for year/month if provided
+            if (year || month) {
+                const whereClause = [];
+
+                if (year) {
+                    whereClause.push(
+                        Models.Sequelize.where(
+                            Models.Sequelize.fn('strftime', '%Y', Models.Sequelize.col('date')),
+                            year.toString()
+                        )
+                    );
+                }
+
+                if (month) {
+                    const monthStr = String(month).padStart(2, '0'); // 01-12
+                    whereClause.push(
+                        Models.Sequelize.where(
+                            Models.Sequelize.fn('strftime', '%m', Models.Sequelize.col('date')),
+                            monthStr
+                        )
+                    );
+                }
+
+                query.where = { [Models.Sequelize.Op.and]: whereClause };
+            }
+
+            const foundItems = await Models[this.model].findAll(query);
+            return foundItems;
         } catch (err) {
             console.log('Database error', err);
-            throw new DatabaseError('error executing findAll');;
-        } finally {
-            return foundItems;
+            throw new DatabaseError('error executing findAll');
         }
     }
 
