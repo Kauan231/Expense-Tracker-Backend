@@ -16,10 +16,10 @@ class DocumentController extends Controller {
         let { documentPath, type, invoiceId, cost } = data;
         let result = await this.repository.Create({documentPath, type, invoiceId});
 
-        if(type == 0 || ![undefined, null, ""].includes(cost)) {
+        if(type == 1 || ![undefined, null, ""].includes(cost)) {
             const invoiceController = new InvoiceController();
             let newStatus;
-            if(type === 0) {
+            if(type === 1) {
                 newStatus = 1;
             }
             await invoiceController.UpdateInvoice(invoiceId, cost, newStatus);

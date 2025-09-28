@@ -12,7 +12,15 @@ class InvoiceRouter extends CommonRoutes {
         this.emptyStateDto = EmptyInvoiceDto;
         this.createDto = CreateInvoiceDto;
     }
-    async Get(req, res) { await super.Get(req, res); }
+    async Get(req, res) {
+        const invoiceController = new InvoiceController();
+
+        let results;
+        try { results = await invoiceController.ReadAllWithSkipLimit(req.query);
+        } catch (e) { return SendError(res, e); }
+
+        return SendResult(res, results);
+    }
     async Create(req, res) { await super.Create(req, res); }
     async ReadById(req, res) { await super.ReadById(req, res); }
     async Delete(req, res) { await super.Delete(req, res); }

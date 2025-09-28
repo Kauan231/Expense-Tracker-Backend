@@ -45,6 +45,10 @@ router.post('/create', upload.single('file'), async (req, res) => {
   console.log(req.file); // uploaded file info
   let parsedBody = JSON.parse(JSON.stringify(req.body));
   parsedBody.documentPath = req.file.path;
+
+  parsedBody.type = Number(parsedBody.type);
+  parsedBody.invoiceId = Number(parsedBody.invoiceId);
+  parsedBody.cost = Number(parsedBody.cost);
   await documentRouter.Create({body: parsedBody}, res);
 });
 router.get('/:id', async (req, res) => await documentRouter.ReadById(req, res));

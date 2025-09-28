@@ -28,8 +28,8 @@ class InvoiceController extends Controller {
         invoiceTrackerId
     }) {
         const { invoiceTrackerId, year } = data;
-        const invoiceRepository = new InvoiceRepository();
-        await invoiceRepository.DeleteAllInvoicesOfAPeriod(year);
+        //const invoiceRepository = new InvoiceRepository();
+        //await invoiceRepository.DeleteAllInvoicesOfAPeriod(year);
 
         const invoiceTrackerRepository = new InvoiceTrackerRepository();
         const invoiceTracker = await invoiceTrackerRepository.ReadById(invoiceTrackerId);
@@ -50,6 +50,10 @@ class InvoiceController extends Controller {
         }
 
         return await this.repository.BulkCreate(invoicesToCreate);
+    }
+
+    async ReadAllWithSkipLimit(data = { skip, limit, year, month }) {
+        return await this.repository.ReadAllWithSkipLimit(data);
     }
 }
 

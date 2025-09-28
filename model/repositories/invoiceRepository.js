@@ -33,8 +33,8 @@ class InvoiceRepository extends Repository {
         return new Invoice(result);
     }
 
-    async ReadAllWithSkipLimit(data = { skip, limit }) {
-        const results = await super.ReadAllWithSkipLimit(data.skip, data.limit);
+    async ReadAllWithSkipLimit(data = { skip, limit, year, month }) {
+        const results = await super.ReadAllWithSkipLimit(Number(data.skip), Number(data.limit), Number(data.year), Number(data.month) );
         if (results?.length == 0 || results?.length == undefined) { return []; }
         return results.map(result => new Invoice(result));
     }
