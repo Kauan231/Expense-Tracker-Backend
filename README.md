@@ -2,15 +2,11 @@
 
 ## Demo: https://youtu.be/988Q8hHytX4
 
----
-
 ## 🌐 Language / Idioma
 
 <p>
 <a href="#portugues">🇧🇷 Português</a> | <a href="#english">🇺🇸 English</a>
 </p>
-
----
 
 ## 🇧🇷 Português <a name="portugues"></a>
 
