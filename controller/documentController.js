@@ -14,6 +14,7 @@ class DocumentController extends Controller {
         cost
     }) {
         let { documentPath, type, invoiceId, cost } = data;
+        documentPath = documentPath.replace(/^.*uploads\//, 'uploads/');
         let result = await this.repository.Create({documentPath, type, invoiceId});
 
         if(type == 1 || ![undefined, null, ""].includes(cost)) {
