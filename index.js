@@ -16,6 +16,5 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 routes(app);
 
-app.listen(3000, () => {
-    console.log('API documentation: http://localhost:3000/docs');
-});
+const PORT = 3000;
+app.listen(PORT, "0.0.0.0", () => console.log(`LAN: http://0.0.0.0:${PORT}`));
