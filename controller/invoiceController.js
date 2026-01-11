@@ -38,7 +38,7 @@ class InvoiceController extends Controller {
             dueDate = 1;
         }
         let invoicesToCreate = [];
-        for(let month=1; month < 12; month++) {
+        for(let month=0; month < 11; month++) {
             let date = new Date(year, month, dueDate);
             let newInvoice = {
                 date: date,
