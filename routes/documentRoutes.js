@@ -6,10 +6,10 @@ const { CreateDocumentDto, EmptyDocumentDto } = require('../model/dtos/createDoc
 const CommonRoutes = require('./routes');
 const multer  = require('multer');
 
-const uploadDir = path.join(__dirname, '../uploads');
+const UPLOADS_DIR = process.env.UPLOADS_DIR || path.join(__dirname, 'uploads');
 
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
+if (!fs.existsSync(UPLOADS_DIR)) {
+  fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 }
 
 const router = Router();
@@ -17,7 +17,7 @@ const router = Router();
 // configure storage
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, uploadDir); // folder where files will be saved
+    cb(null, UPLOADS_DIR);
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + path.extname(file.originalname));

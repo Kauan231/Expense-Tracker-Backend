@@ -1,20 +1,41 @@
+const express = require('express');
+const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
 const swaggerFile = require('./swagger');
-const express = require('express');
-const app = express();
 const routes = require('./routes');
-const cors = require('cors');
 const path = require('path');
+const db = require('./models');
+
+const app = express();
 
 /* Middlewares */
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.use(express.json());
 app.use(cors());
 
-// Serve static files from /project/uploads
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+/* Uploads */
+const UPLOADS_DIR = process.env.UPLOADS_DIR || path.join(__dirname, 'uploads');
+app.use('/uploads', express.static(UPLOADS_DIR));
 
-routes(app);
+async function bootstrap() {
+  try {
+    await db.sequelize.authenticate();
+    console.log('Database connected');
 
-const PORT = 3000;
-app.listen(PORT, "0.0.0.0", () => console.log(`LAN: http://0.0.0.0:${PORT}`));
+    await db.sequelize.sync();
+    console.log('Database synced');
+
+    routes(app);
+
+    const PORT = process.env.BACKEND_PORT || 3000;
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`LAN: http://0.0.0.0:${PORT}`);
+      console.log(`Docs: http://localhost:${PORT}/docs`);
+    });
+  } catch (err) {
+    console.error('Bootstrap failed:', err);
+    process.exit(1);
+  }
+}
+
+bootstrap();
