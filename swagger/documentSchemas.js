@@ -17,13 +17,11 @@ const documentPaths =
                     schema: {
                         type: 'object',
                         properties: {
-                            // File
                             file: {
                                 type: 'string',
                                 format: 'binary',
                                 description: 'The file to upload'
                             },
-                            // Additional JSON fields
                             type: { type: 'number', format: 'float' },
                             invoiceId: { type: 'number', format: 'float' },
                             cost: { type: 'number', format: 'float' },

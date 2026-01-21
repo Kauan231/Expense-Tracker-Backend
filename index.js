@@ -9,7 +9,9 @@ const db = require('./models');
 const app = express();
 
 /* Middlewares */
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
+if(process.env.DEV) {
+  app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
+}
 app.use(express.json());
 app.use(cors());
 
@@ -28,9 +30,10 @@ async function bootstrap() {
     routes(app);
 
     const PORT = process.env.BACKEND_PORT || 3000;
-    app.listen(PORT, '0.0.0.0', () => {
-      console.log(`LAN: http://0.0.0.0:${PORT}`);
-      console.log(`Docs: http://localhost:${PORT}/docs`);
+    const IP = process.env.DEV ? '0.0.0.0' : '127.0.0.1';
+    app.listen(PORT, IP, () => {
+      console.log(`LAN: http://${IP}:${PORT}`);
+      console.log(`Docs: http://${IP}:${PORT}/docs`);
     });
   } catch (err) {
     console.error('Bootstrap failed:', err);
