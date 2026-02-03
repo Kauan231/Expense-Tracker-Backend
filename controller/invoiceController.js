@@ -24,32 +24,33 @@ class InvoiceController extends Controller {
     }
 
     async CreateAYear(data = {
-        year,
-        invoiceTrackerId
+        year
     }) {
-        const { invoiceTrackerId, year } = data;
-        //const invoiceRepository = new InvoiceRepository();
-        //await invoiceRepository.DeleteAllInvoicesOfAPeriod(year);
+        const { year } = data;
 
         const invoiceTrackerRepository = new InvoiceTrackerRepository();
-        const invoiceTracker = await invoiceTrackerRepository.ReadById(invoiceTrackerId);
-        let dueDate = invoiceTracker.dueDate;
-        if(dueDate == 0) {
-            dueDate = 1;
-        }
-        let invoicesToCreate = [];
-        for(let month=0; month < 11; month++) {
-            let date = new Date(year, month, dueDate);
-            let newInvoice = {
-                date: date,
-                invoiceTrackerId: invoiceTracker.id,
-                status: 0
+        let allInvoiceTrackers = await invoiceTrackerRepository.ReadAllWithSkipLimit(0, 1000);
+        for (let invoiceTracker of allInvoiceTrackers) {
+            let dueDate = invoiceTracker.dueDate;
+
+            if(dueDate == 0) {
+                dueDate = 1;
             }
 
-            invoicesToCreate.push(newInvoice);
-        }
+            let invoicesToCreate = [];
+            for(let month=0; month < 12; month++) {
+                let date = new Date(year, month, dueDate);
+                let newInvoice = {
+                    date: date,
+                    invoiceTrackerId: invoiceTracker.id,
+                    status: 0
+                }
 
-        return await this.repository.BulkCreate(invoicesToCreate);
+                invoicesToCreate.push(newInvoice);
+            }
+
+            await this.repository.BulkCreate(invoicesToCreate);
+        }
     }
 
     async ReadAllWithSkipLimit(data = { skip, limit, year, month }) {
