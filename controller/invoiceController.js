@@ -27,6 +27,7 @@ class InvoiceController extends Controller {
         year
     }) {
         const { year } = data;
+        let allInvoicesAlreadyCreatedForThisYear = await this.ReadAllWithSkipLimit({skip: 0, limit: 1000, year});
 
         const invoiceTrackerRepository = new InvoiceTrackerRepository();
         let allInvoiceTrackers = await invoiceTrackerRepository.ReadAllWithSkipLimit(0, 1000);
@@ -46,7 +47,10 @@ class InvoiceController extends Controller {
                     status: 0
                 }
 
-                invoicesToCreate.push(newInvoice);
+                let invoiceAlreadyExistingForThisMonth = allInvoicesAlreadyCreatedForThisYear.find(inv => (inv.invoiceTrackerId == invoiceTracker.id) && new Date(inv.date).getMonth() == month);
+                if(!invoiceAlreadyExistingForThisMonth) {
+                    invoicesToCreate.push(newInvoice);
+                }
             }
 
             await this.repository.BulkCreate(invoicesToCreate);
