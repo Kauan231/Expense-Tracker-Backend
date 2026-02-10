@@ -20,8 +20,8 @@ module.exports = (sequelize, DataTypes) => {
 
   /*
     Types:
-    0: receipt
-    1: billet
+    0: billet
+    1: receipt
   */
 
   Document.init({

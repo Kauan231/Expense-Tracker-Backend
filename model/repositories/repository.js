@@ -169,10 +169,10 @@ class Repository {
         }
     }
 
-    async ReadOneByCustomField(field, value) {
+    async ReadOneByCustomField(query) {
         let foundItems;
         try {
-            foundItems = await Models[this.model].findOne({ where: { [field]: value } });
+            foundItems = await Models[this.model].findOne({ where: query });
         } catch (err) {
             console.log('Database error', err);
             throw new DatabaseError('error executing findOne');
@@ -355,6 +355,23 @@ class Repository {
                 }
             }
         });
+    }
+
+    async UpdateById(id, updateDto, options = {}) {
+        try {
+            const [affectedRows] = await Models[this.model].update(updateDto, {
+                where: { id },
+                ...options
+            });
+
+            if (!affectedRows) return null;
+
+            const updatedItem = await Models[this.model].findOne({ where: { id } });
+            return updatedItem?.dataValues;
+        } catch (err) {
+            console.log('Database error', err);
+            throw new DatabaseError('error executing update');
+        }
     }
 }
 
