@@ -11,12 +11,23 @@ class DocumentRepository extends Repository {
         type,
         invoiceId,
     }) {
-        await super.DeleteByCustomFieldsArray([
-            ['type', data.type],
-            ['invoiceId', data.invoiceId]
-        ]);
+        let result = await this.ReadByInvoiceAndTypeRaw(data);
 
-        const result = await super.Create(data);
+        if(!result) {
+            result = await super.Create(data);
+        } else {
+            const document = new Document(result).toObject();
+            const keysToUpdate = Object.keys(document);
+
+            const updateObject = {};
+            for(const key of keysToUpdate) {
+                if(data[key] != document[key]) {
+                    updateObject[key] = data[key];
+                }
+            }
+
+            result = await super.UpdateById(result.id, updateObject);
+        }
         return new Document(result);
     }
 
@@ -40,6 +51,13 @@ class DocumentRepository extends Repository {
         const results = await super.ReadAllWithSkipLimit(data.skip, data.limit);
         if (results?.length == 0 || results?.length == undefined) { return []; }
         return results.map(result => new Document(result));
+    }
+
+    async ReadByInvoiceAndTypeRaw(data = {invoiceId, type}) {
+        const {invoiceId, type} = data;
+        const result = await super.ReadOneByCustomField({invoiceId, type});
+        if (result == undefined) { return undefined; }
+        return result;
     }
 }
 
