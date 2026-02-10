@@ -5,6 +5,7 @@ const { DocumentController } = require('../controller');
 const { CreateDocumentDto, EmptyDocumentDto } = require('../model/dtos/createDocumentDto');
 const CommonRoutes = require('./routes');
 const multer  = require('multer');
+const { SendError, SendResult } = require('../utils/responses');
 
 const UPLOADS_DIR = process.env.UPLOADS_DIR || path.join(__dirname, 'uploads');
 
@@ -34,7 +35,15 @@ class DocumentRouter extends CommonRoutes {
         this.createDto = CreateDocumentDto;
     }
     async Get(req, res) { await super.Get(req, res); }
-    async Create(req, res) { await super.Create(req, res); }
+    async Create(req, res) {
+      const documentController = new DocumentController();
+
+        let result;
+        try { result = await documentController.Create(req.body);
+        } catch (e) { return SendError(res, e); }
+
+        return SendResult(res, result);
+    }
     async ReadById(req, res) { await super.ReadById(req, res); }
     async Delete(req, res) { await super.Delete(req, res); }
 }
@@ -42,9 +51,10 @@ class DocumentRouter extends CommonRoutes {
 const documentRouter = new DocumentRouter();
 
 router.post('/create', upload.single('file'), async (req, res) => {
-  console.log(req.file); // uploaded file info
+  if(req.file) { console.log("[Uploaded file]", req.file); }
+
   let parsedBody = JSON.parse(JSON.stringify(req.body));
-  parsedBody.documentPath = req.file.path;
+  parsedBody.documentPath = req.file?.path;
 
   parsedBody.type = Number(parsedBody.type);
   parsedBody.invoiceId = Number(parsedBody.invoiceId);
