@@ -17,7 +17,7 @@ class InvoiceTrackerController extends Controller {
     async ReadById(id = 0, year, month) {
         if (year) {
             return await this.repository.ReadByIdAndNestedPopulateFromADate(id, [
-                { model: 'Invoice', include: ['Document'], year, month } // now handled properly
+                { model: 'Invoice', include: ['Document'], year, month }
             ]);
         }
 
