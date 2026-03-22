@@ -2,6 +2,7 @@ const { Router } = require('express');
 const { InvoiceTrackerController } = require('../controller');
 const { CreateInvoiceTrackerDto, EmptyInvoiceTrackerDto } = require('../model/dtos/createInvoiceTrackerDto');
 const CommonRoutes = require('./routes');
+const { SendError, SendResult } = require('../utils/responses');
 
 const router = Router();
 
@@ -11,7 +12,16 @@ class InvoiceTrackerRouter extends CommonRoutes {
         this.emptyStateDto = EmptyInvoiceTrackerDto;
         this.createDto = CreateInvoiceTrackerDto;
     }
-    async Get(req, res) { await super.Get(req, res); }
+    async Get(req, res) {
+        const invoiceTrackerController = new InvoiceTrackerController();
+        await invoiceTrackerController.ReadAll(req, res);
+
+        let results;
+        try { results = await invoiceTrackerController.ReadAll(req.query);;
+        } catch (e) { return SendError(res, e); }
+
+        return SendResult(res, results);
+    }
     async Create(req, res) { await super.Create(req, res); }
     async ReadById(req, res) { await super.ReadById(req, res); }
     async Delete(req, res) { await super.Delete(req, res); }

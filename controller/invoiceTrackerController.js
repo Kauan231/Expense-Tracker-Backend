@@ -25,6 +25,16 @@ class InvoiceTrackerController extends Controller {
             { model: 'Invoice', include: ['Document'] }
         ]);
     }
+
+    async ReadAll(data={ year, month }) {
+        let { year, month } = data;
+
+        return await this.repository.ReadAllWithNestedPopulateFromADate(
+            [
+                { model: 'Invoice', include: ['Document'], year, month }
+            ]
+        );
+    }
 }
 
 module.exports = InvoiceTrackerController;
