@@ -17,13 +17,23 @@ class InvoiceTrackerController extends Controller {
     async ReadById(id = 0, year, month) {
         if (year) {
             return await this.repository.ReadByIdAndNestedPopulateFromADate(id, [
-                { model: 'Invoice', include: ['Document'], year, month } // now handled properly
+                { model: 'Invoice', include: ['Document'], year, month }
             ]);
         }
 
         return await this.repository.ReadByIdAndNestedPopulate(id, [
             { model: 'Invoice', include: ['Document'] }
         ]);
+    }
+
+    async ReadAll(data={ year, month }) {
+        let { year, month } = data;
+
+        return await this.repository.ReadAllWithNestedPopulateFromADate(
+            [
+                { model: 'Invoice', include: ['Document'], year, month }
+            ]
+        );
     }
 }
 
